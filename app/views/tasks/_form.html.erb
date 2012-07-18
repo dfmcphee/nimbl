@@ -1,0 +1,43 @@
+<%= form_for(@task) do |f| %>
+  <% if @task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+
+      <ul>
+      <% @task.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description, :cols => "30", :rows => "10" %>
+  </div>
+  <div class="field">
+    <%= f.label :hour_estimate %>
+    <%= f.text_field :hour_estimate %>
+  </div>
+  <div class="field">
+    <%= f.label :story_points %>
+    <%= f.text_field :sp %>
+  </div>
+  <div class="field">
+    <%= f.label :business_value_points %>
+    <%= f.text_field :bvp %>
+  </div>
+  <div class="field">
+    <%= collection_select(:task, :stage_id, @stages, :id, :name, {:prompt => true}) %>
+  </div>
+  <div class="field">
+    <%= collection_select(:task, :sprint_id, @sprints, :id, :name, {:prompt => true}) %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Save", :class => 'btn btn-primary pull-right' %>
+  </div>
+<% end %>

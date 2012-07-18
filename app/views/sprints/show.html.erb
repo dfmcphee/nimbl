@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @sprint.name %></h1>
+
+<div class="row">
+	<div class="span12">
+		<table class="table">
+			<thead>
+				<tr>
+					<td>Name</td>
+					<td>Description</td>
+					<td>Current Stage</td>
+				</tr>
+			</thead>
+			<tbody>
+			<% if !@sprint.tasks.empty? %>
+				<% @sprint.tasks.each do |task| %>
+					<tr>
+						<td><%= task.name %></td>
+						<td><%= task.description %></td>
+						<td>
+							<% if !task.stage.nil? %>
+								<%= task.stage.name %>
+							<% else %>
+								Not started.
+							<% end %>
+						</td>
+					</tr>
+				<% end %>
+			<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<%= link_to 'Edit', edit_sprint_path(@sprint) %> |
+<%= link_to 'Back', sprints_path %>

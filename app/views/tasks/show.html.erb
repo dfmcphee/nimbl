@@ -1,0 +1,29 @@
+<div class="row">
+	<div class="span6 offset3 well">
+		<p id="notice"><%= notice %></p>
+		
+		<p>
+		  <b>Name:</b>
+		  <%= @task.name %>
+		</p>
+		
+		<p>
+		  <b>Description:</b>
+		  <%= @task.description %>
+		</p>
+		
+		<p>
+		  <b>User:</b>
+		  <%= @task.user_id %>
+		</p>
+		
+		<p>
+		  <b>Stage:</b>
+		  <%= @task.stage_id %>
+		</p>
+		
+		
+		<%= link_to 'Edit', edit_task_path(@task) %> |
+		<%= link_to 'Back', tasks_path %>
+	</div>
+</div>

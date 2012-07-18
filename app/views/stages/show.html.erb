@@ -1,0 +1,14 @@
+<div class="row">
+	<div class="span6 offset3 well">
+		<p id="notice"><%= notice %></p>
+		
+		<p>
+		  <b>Name:</b>
+		  <%= @stage.name %>
+		</p>
+		
+		
+		<%= link_to 'Edit', edit_stage_path(@stage) %> |
+		<%= link_to 'Back', stages_path %>
+	</div>
+</div>
