@@ -3,6 +3,8 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   
   match '/sprints/:id/add_task' => 'sprints#add_task'
   
+  match '/sprints/:id/assign_stage' => 'sprints#assign_stage'
+  
   resources :sprints
 
   resources :stages

@@ -14,12 +14,16 @@
 		
 		<p>
 		  <b>User:</b>
-		  <%= @task.user_id %>
+		  <% if !@task.user.nil? %>
+		  	<%= @task.user.name %>
+		  <% end %>
 		</p>
 		
 		<p>
 		  <b>Stage:</b>
-		  <%= @task.stage_id %>
+		  <% if !@task.stage.nil? %>
+		  	<%= @task.stage.name %>
+		  <% end %>
 		</p>
 		
 		

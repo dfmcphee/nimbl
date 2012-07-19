@@ -1,4 +1,24 @@
-<h3>Home</h3>
-<% @users.each do |user| %>
-  <p>User: <%=link_to user.name, user %></p>
-<% end %>
+<h2>My Tasks</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<td>Name</td>
+			<td>Description</td>
+			<td>Stage</td>
+		</tr>
+	</thead>
+	<% @tasks.each do |task| %>
+	<tr>
+		<td><%= task.name %></td>
+		<td><%= task.description %></td>
+		<td>
+			<% if !task.stage.nil? %>
+				<%= task.stage.name %>
+			<% else %>
+				Not started.
+			<% end %>
+		</td>
+		<td></td>
+	</tr>
+	<% end %>
+</table>
