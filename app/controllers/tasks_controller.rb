@@ -29,8 +29,11 @@ class TasksController < ApplicationController
   # GET /tasks/new.json
   def new
     @task = Task.new
+    
     @stages = Stage.find(:all)
+    
     @sprints = Sprint.find(:all)
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @task }
@@ -48,6 +51,25 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(params[:task])
+    
+    required_stages = params[:stages].collect {|id| id.to_i}
+    stages = Stage.find(:all)
+    
+    stages.each do |stage|
+    	task_stage = TaskStage.new
+    	task_stage.stage = stage
+    	task_stage.task = @task
+    	task_stage.status = 'open'
+    	
+    	if required_stages.include?(stage.id)
+    		task_stage.required = true
+    	else
+    		task_stage.required = false
+    	end
+    	
+    	task_stage.save
+    end
+    
     @task.user_id = current_user.id 
     
     respond_to do |format|

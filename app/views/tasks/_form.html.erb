@@ -31,12 +31,21 @@
     <%= f.label :business_value_points %>
     <%= f.text_field :bvp %>
   </div>
-  <div class="field">
-    <%= collection_select(:task, :stage_id, @stages, :id, :name, {:prompt => true}) %>
-  </div>
+  
   <div class="field">
     <%= collection_select(:task, :sprint_id, @sprints, :id, :name, {:prompt => true}) %>
   </div>
+  
+  <fieldset>
+  	<legend>Required Stages</legend>
+  	<% @stages.each do |stage| %>
+  		<label>
+  			<%= stage.name %>
+  			<%= check_box_tag 'stages[]', stage.id %>
+  		</label>
+  	<% end %>
+  </fieldset>
+
   <div class="actions">
     <%= f.submit "Save", :class => 'btn btn-primary pull-right' %>
   </div>

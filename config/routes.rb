@@ -5,6 +5,8 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   
   match '/sprints/:id/assign_stage' => 'sprints#assign_stage'
   
+  match '/sprints/change_status' => 'sprints#change_status'
+  
   resources :sprints
 
   resources :stages
