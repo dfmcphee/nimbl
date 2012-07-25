@@ -110,7 +110,24 @@ class SprintsController < ApplicationController
 	respond_to do |format|
 	  format.json { render json: { :task => @task, :errors => @errors } }
     end
+  end
+  
+  def remove_task
+  	@errors = Array.new 
+  	
+  	if !params[:task_id].nil?
+  		@task = Task.find(params[:task_id])
+	  	if !@task.nil? 
+  			@task.sprint_id = nil
+			@task.save
+	  	else
+	  		@errors.push('Task not found.')
+	  	end
+	end
 	 
+	respond_to do |format|
+	  format.json { render json: { :task => @task, :errors => @errors } }
+    end
   end
   
   def assign_stage
