@@ -38,10 +38,10 @@
   
   <fieldset>
   	<legend>Required Stages</legend>
-  	<% @stages.each do |stage| %>
+  	<% @task_stages.each do |task_stage| %>
   		<label>
-  			<%= stage.name %>
-  			<%= check_box_tag 'stages[]', stage.id %>
+  			<%= task_stage.stage.name %>
+  			<%= check_box_tag 'stages[]', task_stage.stage.id, task_stage.required %>
   		</label>
   	<% end %>
   </fieldset>

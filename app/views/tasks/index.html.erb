@@ -1,13 +1,11 @@
 <h1>Backlog</h1>
-
+<hr/>
 <table class="table">
   <thead>
   	<tr>
 	    <th>Name</th>
 	    <th>Description</th>
 	    <th>Added by</th>
-	    <th></th>
-	    <th></th>
 	    <th></th>
   	</tr>
   </thead>
@@ -18,9 +16,12 @@
 	    <td><%= task.name %></td>
 	    <td><%= task.description %></td>
 	    <td><%= task.user.name %></td>
-	    <td><%= link_to 'Show', task, :class => 'btn btn-info' %></td>
-	    <td><%= link_to 'Edit', edit_task_path(task), :class => 'btn btn-warning' %></td>
-	    <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td>
+	    <td>
+	    	<%= link_to 'Show', task, :class => 'btn btn-info' %>
+	    	<a href="#" class="btn btn-primary add-to-sprint" data-task-id="<%= task.id %>">Add to Sprint</a>
+	    	<%= link_to 'Edit', edit_task_path(task), :class => 'btn btn-warning' %>
+	    	<%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %>
+	    </td>
   	</tr>
   </tbody>
 <% end %>
@@ -29,6 +30,7 @@
 <br />
 
 <div class="field">
+	<label>Sprint</label>
 	<%= collection_select(:task, :stage_id, @sprints, :id, :name, {:prompt => true}) %>
 </div>
 

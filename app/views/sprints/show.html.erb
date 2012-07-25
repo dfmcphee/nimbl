@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1><%= @sprint.name %></h1>
-
+<hr/>
 <div class="row">
 	<div class="span12">
 		<table class="table table-bordered">
@@ -34,15 +34,15 @@
 							<% task.task_stages.each do |stage| %>
 								<% if stage.required %>
 									<td class="required">
-								<% else %>
-									<td class="not-required">
-								<% end %>
 								<%= select("stage_status", stage.id, ['open','started','finished'], {:selected => stage.status}, { :class => 'task-status-select', :data_stage_id => stage.id}) %>
 								<% stage.assignments.each do |assignment| %>
 									<p><%= assignment.user.name %></p>
 								<% end %>
 								<%= link_to "Assign to Myself", :controller => "sprints", :action => "assign_stage", :task_stage_id => stage.id %>
-								</td>
+									</td>
+								<% else %>
+									<td class="not-required"></td>
+								<% end %>
 							<% end %>
 						<% end %>
 					</tr>
@@ -54,6 +54,3 @@
 </div>
 
 <p>Target story points: <%= @target_storypoints %><p>
-
-<%= link_to 'Edit', edit_sprint_path(@sprint) %> |
-<%= link_to 'Back', sprints_path %>

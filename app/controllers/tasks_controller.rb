@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = Task.all(:conditions => ['sprint_id IS NULL'])
     @sprints = Sprint.find(:all)
 
     respond_to do |format|
@@ -30,7 +30,18 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     
-    @stages = Stage.find(:all)
+    @task_stages = Array.new
+    
+    stages = Stage.find(:all)
+    
+    stages.each do |stage|
+    	task_stage = TaskStage.new
+    	task_stage.stage = stage
+    	task_stage.task = @task
+    	task_stage.status = 'open'
+    	
+    	@task_stages.push(task_stage)
+    end
     
     @sprints = Sprint.find(:all)
     
@@ -43,7 +54,7 @@ class TasksController < ApplicationController
   # GET /tasks/1/edit
   def edit
     @task = Task.find(params[:id])
-    @stages = Stage.find(:all)
+    @task_stages = TaskStage.where(:task_id => @task.id)
     @sprints = Sprint.find(:all)
   end
 

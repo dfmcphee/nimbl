@@ -91,29 +91,38 @@ class SprintsController < ApplicationController
   
   def add_task
   	@sprint = Sprint.find(params[:id])
+  	@errors = Array.new 
   	
   	if !params[:task_id].nil?
   		@task = Task.find(params[:task_id])
-	  	if !@task.nil?
-			@task.sprint = @sprint
-	  		if @task.save
-	  			format.json { render json: @sprint, status: :created, location: @sprint }
-	  		else
-	  			format.json { render json: @sprint.errors, status: :unprocessable_entity }
-	  		end
+	  	if !@task.nil? 
+	  		if @task.sprint_id.nil?
+				@task.sprint = @sprint
+				@task.save
+			else
+				@errors.push('Task already in sprint.')
+			end
+	  	else
+	  		@errors.push('Task not found.')
 	  	end
-	 else
-	  	format.json { render json: @sprint.errors, status: :unprocessable_entity }
-	 end
+	end
+	 
+	respond_to do |format|
+	  format.json { render json: { :task => @task, :errors => @errors } }
+    end
+	 
   end
   
   def assign_stage
   	@sprint = Sprint.find(params[:id])
   	
   	if !params[:task_stage_id].nil?
-  	    @assignment = Assignment.new 
+  		@assignment = Assignment.where(:user_id => current_user.id, :task_stage_id => params[:task_stage_id])
+  		
   		@task_stage = TaskStage.find(params[:task_stage_id])
-  		if !@task_stage.nil?
+  		
+  		if !@task_stage.nil? && @assignment.empty?
+  			@assignment = Assignment.new
 			@assignment.task_stage = @task_stage
 			@assignment.user = current_user
 	  		@assignment.save
