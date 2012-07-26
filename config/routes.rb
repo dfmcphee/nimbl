@@ -9,10 +9,15 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   
   match '/sprints/change_status' => 'sprints#change_status'
   
+  
+  match '/tasks/:id/edit_row' => 'tasks#edit_row'
+  
   resources :sprints
+  
 
   resources :stages
-
+  
+  
   resources :tasks
 
   authenticated :user do

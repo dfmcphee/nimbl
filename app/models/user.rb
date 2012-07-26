@@ -10,5 +10,4 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
   
   has_many :assignments
-  has_many :tasks, :through => :assignments
 end

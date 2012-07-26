@@ -2,6 +2,7 @@ $(document).ready( function() {
 	$('.task-status-select').on('change', function(){
 		var task_stage = $(this).attr('data_stage_id');
 		var task_stage_status = $(this).val();
+		var task_stage_cell = $(this).closest('td');
 		
 		$.ajax({
 		  type: 'POST',
@@ -9,6 +10,12 @@ $(document).ready( function() {
 		  data: {
 			  task_stage_id: task_stage,
 			  task_stage_status: task_stage_status
+		  },
+		  success: function() {
+			  $(task_stage_cell).removeClass('open');
+			  $(task_stage_cell).removeClass('started');
+			  $(task_stage_cell).removeClass('finished');
+			  $(task_stage_cell).addClass(task_stage_status);
 		  }
 		});
 	});

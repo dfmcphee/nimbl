@@ -19,4 +19,33 @@
 
 $(document).ready(function() {
     $('.table').dataTable();
-} );
+    
+    $('.edit-row-button').live('click', function() {
+	    var row = $(this).closest('tr');
+	    
+	    var task_id = $(this).attr('data-task-id');
+	    
+	    var url = '/tasks/' + task_id + '/edit_row';
+		
+		$.get(url, function(data) {
+			window['row-' + task_id] = $(row).html();
+			$(row).html(data);
+		});
+    });
+    
+    $('.save-row').live('click', function(event) {
+	    var row = $(this).closest('tr');
+	    var task_id = $(this).attr('data-task-id');
+	    
+	    var form = $(row).find('form');
+	    
+	    $(row).html(window['row-' + task_id]);
+    });
+    
+    $('.cancel-row').live('click', function(event) {
+	    var row = $(this).closest('tr');
+	    var task_id = $(this).attr('data-task-id');
+	    
+	    $(row).html(window['row-' + task_id]);
+    });
+});

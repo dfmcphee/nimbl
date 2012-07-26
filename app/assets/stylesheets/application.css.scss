@@ -57,3 +57,31 @@ table {
     margin: 1em 0;
     clear: both;
 }
+
+.table td input[type=text] {
+	width: 30px;
+}
+
+.table tbody tr:hover td.open {
+	background: #f78282;
+}
+
+.table tbody tr td.open {
+	background: #f78282;
+}
+
+.table tbody tr td.started {
+	background: #8b9cff;
+}
+
+.table tbody tr:hover td.started {
+	background: #8b9cff;
+}
+
+.table tbody tr td.finished {
+	background: #9aff9b;
+}
+
+.table tbody tr:hover td.finished {
+	background: #9aff9b;
+}

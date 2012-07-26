@@ -57,6 +57,14 @@ class TasksController < ApplicationController
     @task_stages = TaskStage.where(:task_id => @task.id)
     @sprints = Sprint.find(:all)
   end
+  
+  def edit_row
+  	@task = Task.find(params[:id])
+  	@task_stages = TaskStage.where(:task_id => @task.id)
+    @sprints = Sprint.find(:all)
+    
+    render :layout => false
+  end
 
   # POST /tasks
   # POST /tasks.json
