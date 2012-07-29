@@ -19,7 +19,6 @@
 			</thead>
 			<tbody>
 			<% if !@sprint.tasks.empty? %>
-				<% sp_complete = 0 %>
 				<% @sprint.tasks.each do |task| %>
 					<tr>
 						<td><%= task.description %></td>
@@ -31,44 +30,22 @@
 							<% end %>
 						</td>
 						<% if !task.task_stages.empty? %>
-							<% stages_complete = 0 %>
-							<% stages_required = 0 %>
 							<% task.task_stages.each do |stage| %>
-								<% if stage.required %>
-									<% stages_required = stages_required + 1 %>
-									<% if stage.status == 'finished' %>
-										<% stages_complete = stages_complete + 1 %>
-									<% end %>
-									<td class="required <%= stage.status %>">
-								<%= select("stage_status", stage.id, ['open','started','finished'], {:selected => stage.status}, { :class => 'task-status-select', :data_stage_id => stage.id}) %>
-								<% already_assigned = false %>
-								<% stage.assignments.each do |assignment| %>
-									<p><%= assignment.user.name %></p>
-									<% if assignment.user.id == current_user.id %>
-										<% already_assigned = true %>
-									<% end %>
-								<% end %>
-								<% if !already_assigned %>
-								<%= link_to "Assign to Myself", :controller => "sprints", :action => "assign_stage", :id => @sprint.id, :task_stage_id => stage.id %>
-								<% end %>
-									</td>
-								<% else %>
-									<td class="not-required"></td>
-								<% end %>
+								<%= render :partial => 'sprints/stage', :locals => { :stage => stage } %>
 							<% end %>
 						<% end %>
-						<td>
-							<a href="#" class="btn btn-warning edit-row-button" data-task-id="<%= task.id %>">
-								<i class="icon-white icon-edit"></i>
-							</a>
-							<a href="#" class="btn btn-danger remove-from-sprint" data-task-id="<%= task.id %>">
-								<i class="icon-white icon-remove"></i>
-							</a>
+						<td class="row-actions-cell">
+							<div class="row-actions btn-group-vertical" data-toggle="buttons-radio">
+								<a href="#" class="btn btn-warning edit-row-button" data-task-id="<%= task.id %>">
+									<i class="icon-white icon-edit"></i>
+								</a>
+
+								<a href="#" class="btn btn-danger remove-from-sprint" data-task-id="<%= task.id %>">
+									<i class="icon-white icon-remove"></i>
+								</a>
+							</div>
 						</td>
 					</tr>
-					<% if stages_complete === stages_required %>
-						<% sp_complete = sp_complete + task.sp %>
-					<% end %>
 				<% end %>
 			<% end %>
 			</tbody>
@@ -76,6 +53,36 @@
 	</div>
 </div>
 
-<p>Target story points: <%= @target_storypoints %><p>
+<script>
+	var burndown_data = <%= @burndown_data %>;
+	var sprint_days = <%= @number_of_days.to_s %>;
+	var target_storypoints = <%= @target_storypoints %>;
+</script>
 
-<p>Completed story points: <%= sp_complete %><p>
+<button class="btn btn-info" data-toggle="collapse" data-target="#analytics">
+  <i class="icon-bar-chart"></i> <b class="caret"></b> Stats
+</button>
+ 
+<div id="analytics" class="collapse">
+	<div class="row well">
+		
+		<div class="span6">
+			<div style="font-size: 24px; margin-left:30px;">
+			  <i class="icon-fire"></i> Burn down
+			</div>
+			<div id="burndown"></div>
+		</div>
+		
+		<div id="span6">
+			<div class="points-summary">
+				<p class="lead">Target story points: <%= @target_storypoints %></p>
+	
+				<p class="lead">Completed story points: <span id="sp-complete"><%= @completed_storypoints %></span></p>
+			</div>
+			<div id="percentage">
+				<%= "%.0f" % (100 - ((@completed_storypoints / @target_storypoints) * 100)) %>% left
+			</div>
+		</div>
+		
+	</div>
+</div>

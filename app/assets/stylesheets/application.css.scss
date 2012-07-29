@@ -17,6 +17,26 @@
   margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
 }
 
+.btn-small {
+	float:right;
+	vertical-align:middle;
+	color:#c50000;
+}
+
+.btn-small:hover {
+	text-decoration: none;
+	color:#9e0000;
+}
+
+.btn-group-vertical { display:block; }
+.btn-group-vertical + .btn-group-vertical { margin-top:5px; }
+.btn-group-vertical .btn {
+  display:block;
+  width:100%;
+  margin-top: 3px;
+  padding-top:5px;
+}
+
 .task-status-select {
 	width:100%;
 }
@@ -62,6 +82,44 @@ table {
 	width: 30px;
 }
 
+.stages-toolbar {
+	width: 120px;
+	margin-bottom:10px;
+}
+
+#burndown {
+	width: 450px;
+	height: 250px;
+}
+
+#percentage {
+	margin-top:40px;
+	line-height: 1em;
+	font-size: 6em;
+}
+
+.points-summary {
+	margin-top: 50px;
+}
+
+.dataTables_info {
+	margin: 20px 0 30px 0;
+}
+
+.assigned-to {
+	
+}
+
+td.row-actions-cell {
+	width:28px !important;
+}
+
+.row-actions {
+	width:10px;
+}
+
+/*
+
 .table tbody tr:hover td.open {
 	background: #f78282;
 }
@@ -85,3 +143,5 @@ table {
 .table tbody tr:hover td.finished {
 	background: #9aff9b;
 }
+
+*/

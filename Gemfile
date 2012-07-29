@@ -21,6 +21,7 @@ gem "devise", ">= 2.1.2"
 gem "cancan", ">= 1.6.8"
 gem "rolify", ">= 3.1.0"
 gem "bootstrap-sass", ">= 2.0.4.0"
+gem 'whenever', :require => false
 
 group :development do
   gem "rails-erd"

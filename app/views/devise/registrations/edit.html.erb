@@ -9,15 +9,19 @@
 		  	<%= f.text_field :name %>
 		  </div>
 		  	
-		
+		  <div class="control-group">
+		  	<%= f.label :username %>
+		  	<%= f.text_field :username %>
+		  </div>
+		  
 		  <div class="control-group">
 		  	<%= f.label :email %>
 		  	<%= f.email_field :email %>
 		  </div>
 		
 		  <div class="control-group">
-		  	<%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
-		  	<%= f.password_field :password, :autocomplete => "off" %>
+		  	<label>Password <i>(leave blank if you don't want to change it)</i></label>
+			<%= f.password_field :password, :autocomplete => "off" %>
 		  </div>
 		
 		  <div class="control-group">
@@ -26,7 +30,7 @@
 		  </div>
 		
 		  <div class="control-group">
-		  	<%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
+		  	<label>Current Password <i>(we need your current password to confirm your changes)</i></label>
 		  	<%= f.password_field :current_password %>
 		  </div>
 		

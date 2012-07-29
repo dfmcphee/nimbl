@@ -22,6 +22,12 @@ class SprintsController < ApplicationController
     # Add up storypoints of all tasks in sprint
     @target_storypoints = Task.sum(:sp, :conditions => ['sprint_id = ?', @sprint.id])
 
+    @completed_storypoints = count_completed_tasks(@sprint.tasks)
+    
+    @burndown_data = @sprint.get_burndown_data
+    
+    @number_of_days = ((@sprint.end_time - @sprint.start_time) / 1.day).to_i
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @sprint }
@@ -32,6 +38,14 @@ class SprintsController < ApplicationController
   # GET /sprints/new.json
   def new
     @sprint = Sprint.new
+    
+    last_sprint = Sprint.find(:first, :order => "end_time DESC")
+    
+    @start_datetime = last_sprint.end_time
+    @start_date = @start_datetime.strftime("%d-%m-%Y")
+    
+    @end_datetime = (last_sprint.end_time + 7.days)
+    @end_date = @end_datetime.strftime("%d-%m-%Y")
 
     respond_to do |format|
       format.html # new.html.erb
@@ -42,6 +56,13 @@ class SprintsController < ApplicationController
   # GET /sprints/1/edit
   def edit
     @sprint = Sprint.find(params[:id])
+    
+    
+    @start_datetime = last_sprint.end_time
+    @start_date = @start_datetime.strftime("%d-%m-%Y")
+    
+    @end_datetime = (last_sprint.end_time + 7.days)
+    @end_date = @end_datetime.strftime("%d-%m-%Y")
   end
 
   # POST /sprints
@@ -49,6 +70,12 @@ class SprintsController < ApplicationController
   def create
     @sprint = Sprint.new(params[:sprint])
     @sprint.user_id = current_user.id
+    
+    start_time = params[:date_start]
+    end_time = params[:date_end]
+    
+    @sprint.start_time = start_time
+    @sprint.end_time = end_time
         
     respond_to do |format|
       if @sprint.save
@@ -65,7 +92,16 @@ class SprintsController < ApplicationController
   # PUT /sprints/1.json
   def update
     @sprint = Sprint.find(params[:id])
-
+    
+    start_time = params[:date_start]
+    end_time = params[:date_end]
+    
+    @sprint.start_time = start_time
+    @sprint.end_time = end_time
+    
+    @sprint.save
+    
+    
     respond_to do |format|
       if @sprint.update_attributes(params[:sprint])
         format.html { redirect_to @sprint, notice: 'Sprint was successfully updated.' }
@@ -152,6 +188,24 @@ class SprintsController < ApplicationController
       end
   end
   
+  def remove_assignment
+  	@sprint = Sprint.find(params[:id])
+  	
+  	if !params[:task_stage_id].nil?
+  		@assignment = Assignment.where(:user_id => current_user.id, :task_stage_id => params[:task_stage_id]).first
+  		
+  		if !@assignment.nil?
+	  		@assignment.destroy
+	  	end
+	 end
+	 
+	 respond_to do |format|
+      	format.html { redirect_to @sprint }
+      	format.json { render json: @assignment }
+      end
+  end
+  
+  
   def change_status
   	if !params[:task_stage_id].nil?
   		@task_stage = TaskStage.find(params[:task_stage_id])
@@ -161,9 +215,17 @@ class SprintsController < ApplicationController
 	  	end
 	 end
 	 
+	 sprint = @task_stage.task.sprint 
+	 
+	 @target_sp = Task.sum(:sp, :conditions => ['sprint_id = ?', sprint.id])
+	 @sp_completed = sprint.count_completed_sp
+	 @percentage = "%.0f" % (100 - ((@sp_completed / @target_sp) * 100))
+	 
+	 @burndown_data = sprint.get_burndown_data
+	 
 	 respond_to do |format|
       	format.html # new.html.erb
-      	format.json { render json: @task_stage }
+      	format.json { render json: {:sp_completed => @sp_completed, :target_sp => @target_sp, :percentage => @percentage, :burndown_data => @burndown_data } }
       end
   end
   

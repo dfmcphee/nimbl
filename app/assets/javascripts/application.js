@@ -12,13 +12,16 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap
 //= require_tree .
 
 //= require jquery_ujs
 
+var burndown_data = false;
+
 $(document).ready(function() {
-    $('.table').dataTable();
+    $('.table').dataTable( {
+        "sPaginationType": "scrolling"
+    } );
     
     $('.edit-row-button').live('click', function() {
 	    var row = $(this).closest('tr');
