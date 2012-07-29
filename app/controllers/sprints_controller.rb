@@ -59,7 +59,7 @@ class SprintsController < ApplicationController
     
     last_sprint = Sprint.find(:first, :order => "end_time DESC")
     
-    @start_datetime = @sprint.start_time
+    @start_datetime = @sprint.end_time
     @start_date = @start_datetime.strftime("%d-%m-%Y")
     
     @end_datetime = (@sprint.end_time + 7.days)
