@@ -106,11 +106,40 @@ class TasksController < ApplicationController
   # PUT /tasks/1.json
   def update
     @task = Task.find(params[:id])
-
+    
+    if !params[:stages].nil?
+	    required_stages = params[:stages].collect {|id| id.to_i}
+	    
+	    stages = Stage.find(:all)
+	    
+	    @task_stages = Array.new
+	    
+	    stages.each do |stage|
+	    	task_stage = TaskStage.where(:task_id => @task.id, :stage_id => stage.id).first
+	    	
+	    	if required_stages.include?(stage.id)
+	    		task_stage.required = true
+	    	else
+	    		task_stage.required = false
+	    	end
+	    	
+	    	task_stage.save
+	    	
+	    	@task_stages.push(task_stage)
+	    end
+    end
+    
     respond_to do |format|
       if @task.update_attributes(params[:task])
+      	@burndown_data = @task.sprint.get_burndown_data
+    
+	    target_sp = Task.sum(:sp, :conditions => ['sprint_id = ?', @task.sprint.id])
+		sp_completed = @task.sprint.count_completed_sp
+		percentage = "%.0f" % (100 - ((sp_completed / target_sp) * 100))
+		
+		@stats = {:target_sp => target_sp, :sp_completed => sp_completed, :percentage => percentage}
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { head :no_content }
+        format.json { render json: {:task => @task, :task_stages => @task_stages, :burndown_data => @burndown_data, :stats => @stats } }
       else
         format.html { render action: "edit" }
         format.json { render json: @task.errors, status: :unprocessable_entity }
@@ -128,5 +157,11 @@ class TasksController < ApplicationController
       format.html { redirect_to tasks_url }
       format.json { head :no_content }
     end
+  end
+  
+  def task_row
+  	@task = Task.find(params[:id])
+  	@sprint = @task.sprint
+  	render :layout => false
   end
 end

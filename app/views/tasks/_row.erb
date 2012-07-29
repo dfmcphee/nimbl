@@ -1,52 +1,35 @@
-<%= form_for(@task) do |f| %>
-  <% if @task.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+<tr>
+	<td>
+		<span class="task-description"><%= task.description %></span>
+	</td>
+	<td>
+		<span class="task-sp"><%= task.sp %></span>
+	</td>
+	<td>
+		<span class="task-bvp"><%= task.bvp %></span>
+	</td>
+	<td>
+		<span class="task-pr">
+			<% if task.bvp && task.bvp > 0 && task.sp && task.sp > 0 %>
+				<%= "%.2f" % (task.bvp / task.sp) %>
+			<% end %>
+		</span>
+	</td>
+	<% if !task.task_stages.empty? %>
+		<% task.task_stages.each do |stage| %>
+			<%= render :partial => 'sprints/stage', :locals => { :stage => stage } %>
+		<% end %>
+	<% end %>
+	<td class="row-actions-cell">
+		<div class="row-actions btn-group-vertical" data-toggle="buttons-radio">
+			<a href="#" class="btn btn-warning edit-row-button" data-task-id="<%= task.id %>">
+				<i class="icon-white icon-edit"></i>
+			</a>
 
-      <ul>
-      <% @task.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+			<a href="#" class="btn btn-danger remove-from-sprint" data-task-id="<%= task.id %>">
+				<i class="icon-white icon-remove"></i>
+			</a>
+		</div>
+	</td>
+</tr>
 
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description, :cols => "30", :rows => "10" %>
-  </div>
-  <div class="field">
-    <%= f.label :hour_estimate %>
-    <%= f.text_field :hour_estimate %>
-  </div>
-  <div class="field">
-    <%= f.label :story_points %>
-    <%= f.text_field :sp %>
-  </div>
-  <div class="field">
-    <%= f.label :business_value_points %>
-    <%= f.text_field :bvp %>
-  </div>
-  
-  <div class="field">
-    <%= collection_select(:task, :sprint_id, @sprints, :id, :name, {:prompt => true}) %>
-  </div>
-  
-  <fieldset>
-  	<legend>Required Stages</legend>
-  	<% @task_stages.each do |task_stage| %>
-  		<label>
-  			<%= task_stage.stage.name %>
-  			<%= check_box_tag 'stages[]', task_stage.stage.id, task_stage.required %>
-  		</label>
-  	<% end %>
-  </fieldset>
-
-  <div class="actions">
-    <%= f.submit "Save", :class => 'btn btn-primary pull-right' %>
-  </div>
-<% end %>

@@ -20,32 +20,7 @@
 			<tbody>
 			<% if !@sprint.tasks.empty? %>
 				<% @sprint.tasks.each do |task| %>
-					<tr>
-						<td><%= task.description %></td>
-						<td><%= task.sp %></td>
-						<td><%= task.bvp %></td>
-						<td>
-							<% if task.bvp && task.bvp > 0 && task.sp && task.sp > 0 %>
-								<%= "%.2f" % (task.bvp / task.sp) %>
-							<% end %>
-						</td>
-						<% if !task.task_stages.empty? %>
-							<% task.task_stages.each do |stage| %>
-								<%= render :partial => 'sprints/stage', :locals => { :stage => stage } %>
-							<% end %>
-						<% end %>
-						<td class="row-actions-cell">
-							<div class="row-actions btn-group-vertical" data-toggle="buttons-radio">
-								<a href="#" class="btn btn-warning edit-row-button" data-task-id="<%= task.id %>">
-									<i class="icon-white icon-edit"></i>
-								</a>
-
-								<a href="#" class="btn btn-danger remove-from-sprint" data-task-id="<%= task.id %>">
-									<i class="icon-white icon-remove"></i>
-								</a>
-							</div>
-						</td>
-					</tr>
+					<%= render :partial => 'tasks/row', :locals => { :task => task } %>
 				<% end %>
 			<% end %>
 			</tbody>
@@ -75,7 +50,7 @@
 		
 		<div id="span6">
 			<div class="points-summary">
-				<p class="lead">Target story points: <%= @target_storypoints %></p>
+				<p class="lead">Target story points: <span id="target-sp"><%= @target_storypoints %></span></p>
 	
 				<p class="lead">Completed story points: <span id="sp-complete"><%= @completed_storypoints %></span></p>
 			</div>
@@ -85,4 +60,14 @@
 		</div>
 		
 	</div>
+</div>
+
+<div class="modal hide" id="edit-task-modal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Edit task</h3>
+  </div>
+  <div class="modal-body">
+    <div class="task-form">
+  </div>
 </div>

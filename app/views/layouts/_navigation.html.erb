@@ -1,6 +1,9 @@
-<%= link_to "Current Sprint", root_path, :class => 'brand' %>
+<%= link_to "Nimbl", root_path, :class => 'brand' %>
 <ul class="nav">
   <% if user_signed_in? %>
+  	<li>
+  		<%= link_to "Current Sprint", root_path %>
+  	</li>
   	<li>
     	<%= link_to 'Product Backlog', '/tasks' %>
     </li>

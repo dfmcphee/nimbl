@@ -11,44 +11,98 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery_ujs
 //= require_tree .
 
 //= require jquery_ujs
 
 var burndown_data = false;
 
+var row = false;
+
 $(document).ready(function() {
+	// Setup data tables
     $('.table').dataTable( {
         "sPaginationType": "scrolling"
     } );
     
+    // Setup event for editing a task row
     $('.edit-row-button').live('click', function() {
-	    var row = $(this).closest('tr');
+	    row = $(this).closest('tr');
 	    
 	    var task_id = $(this).attr('data-task-id');
 	    
 	    var url = '/tasks/' + task_id + '/edit_row';
 		
 		$.get(url, function(data) {
-			window['row-' + task_id] = $(row).html();
-			$(row).html(data);
+			$('#edit-task-modal .task-form').html(data);
+			$('#edit-task-modal').modal('show');
+		});
+		
+		$('.edit-row-button').removeClass('active');
+    });
+    
+    // Setup event for saving a task row
+    $('.save-row').live('click', function(event) {
+	    var task_id = $(this).attr('data-task-id');
+	    
+	    var form = $('#edit-task-modal .task-form form');
+	    
+	    var form_data = $(form).serialize();
+	    
+	    $.ajax({
+	      type: 'POST',
+		  url: $(form).attr('action'),
+		  data: form_data,
+		  dataType: "JSON",
+		  success: function(data) {
+			var url = '/tasks/' + task_id + '/task_row';
+		
+			$.get(url, function(data) {
+				$(row).replaceWith(data);
+				$('#edit-task-modal').modal('hide');
+			});
+			
+			burndown_data = data.burndown_data;
+			target_storypoints = data.stats.target_sp;
+			
+			plot_burndown_data();
+			
+			$('#target-sp').html(data.stats.target_sp);
+			
+			$('#sp-complete').html(data.stats.sp_completed);
+		  	  
+		  	$('#percentage').html(data.stats.percentage + '% left');
+		  }
 		});
     });
     
-    $('.save-row').live('click', function(event) {
-	    var row = $(this).closest('tr');
-	    var task_id = $(this).attr('data-task-id');
-	    
-	    var form = $(row).find('form');
-	    
-	    $(row).html(window['row-' + task_id]);
-    });
-    
-    $('.cancel-row').live('click', function(event) {
-	    var row = $(this).closest('tr');
-	    var task_id = $(this).attr('data-task-id');
-	    
-	    $(row).html(window['row-' + task_id]);
+    // Setup event for canceling editing a task row
+    $('.cancel-row').live('click', function(event) {	    
+	    $('#edit-task-modal').modal('hide');
     });
 });
+
+function plot_burndown_data() {
+	// Plot burndown if available
+	if (burndown_data) {
+		$.plot($("#burndown"), [ burndown_data ], {
+	        series: {
+	            lines: { show: true },
+	            points: { show: true }
+	        },
+	        xaxis: {
+	            tickSize: 1,
+	            max: sprint_days,
+	            min: 0,
+	            tickDecimals: 0
+	        },
+	        yaxis: {
+		        max: target_storypoints,
+		        min: 0
+	        },
+	        grid: {
+	            backgroundColor: { colors: ["#fff", "#eee"] }
+	        }
+	    });
+    }
+}

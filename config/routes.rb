@@ -11,8 +11,9 @@ Rails3BootstrapDeviseCancan::Application.routes.draw do
   
   match '/sprints/change_status' => 'sprints#change_status'
   
-  
   match '/tasks/:id/edit_row' => 'tasks#edit_row'
+  
+  match '/tasks/:id/task_row' => 'tasks#task_row'
   
   resources :sprints
   

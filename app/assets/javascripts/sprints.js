@@ -1,8 +1,9 @@
 $(document).ready( function() {
-	$('#alert').hide();
-	
+	// Set up all dropdown menus
 	$('.dropdown-toggle').dropdown()
 	
+	// Set up date pickers and validation
+	$('#alert').hide();
 	$('#date-start')
 	    .datepicker()
 	    .on('changeDate', function(ev){
@@ -28,28 +29,9 @@ $(document).ready( function() {
 	        $('#date-end').datepicker('hide');
 	    });
 	    
-	// Plot burndown if available
-	if (burndown_data) {
-		$.plot($("#burndown"), [ burndown_data ], {
-	        series: {
-	            lines: { show: true },
-	            points: { show: true }
-	        },
-	        xaxis: {
-	            tickSize: 1,
-	            max: sprint_days,
-	            min: 0
-	        },
-	        yaxis: {
-		        max: target_storypoints,
-		        min: 0
-	        },
-	        grid: {
-	            backgroundColor: { colors: ["#fff", "#eee"] }
-	        }
-	    });
-    }
+	plot_burndown_data();
     
+    // Setup event for changing stage status with ajax
 	$('.stages-toolbar a').live('click', function(){
 		var stage_btn = $(this);
 		var task_stage = $(this).closest('.stages-toolbar').attr('data-stage-id');
@@ -83,30 +65,13 @@ $(document).ready( function() {
 		  	  $('#sp-complete').html(data.sp_completed);
 		  	  
 		  	  $('#percentage').html(data.percentage + '% left');
-		  	  
-		  	  $.plot($("#burndown"), [ data.burndown_data ], {
-		        series: {
-		            lines: { show: true },
-		            points: { show: true }
-		        },
-		        xaxis: {
-		            tickSize: 1,
-		            max: sprint_days,
-		            min: 0
-		        },
-		        yaxis: {
-			        max: data.target_sp,
-			        min: 0
-		        },
-		        grid: {
-		            backgroundColor: { colors: ["#fff", "#eee"] }
-		        }
-		    });
+		  	  burndown_data = data.burndown_data;
+		  	  plot_burndown_data();
 		  }
-		  
 		});
 	});
 	
+	// Set up event for removing task row from sprint
 	$('.remove-from-sprint').live('click', function() {
 		var task_row = $(this).closest('tr');
 		var task_id = $(this).attr('data-task-id');

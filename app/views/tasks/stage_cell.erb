@@ -1,6 +1,4 @@
-<% if stage.required %>
-	<td class="required <%= stage.status %>">
-		<div class="stages-toolbar" data-stage-id="<%= stage.id %>">
+<div class="stages-toolbar" data-stage-id="<%= stage.id %>">
 			<div class="btn-group">
 			<% if stage.status == "open" %>
 				<a href="#" class="btn btn-danger" data-status="open"><i class="icon-check-empty"></i></a>
@@ -35,8 +33,4 @@
 			<% if !already_assigned %>
 				<%= link_to "Assign to Myself", :controller => "sprints", :action => "assign_stage", :id => @sprint.id, :task_stage_id => stage.id %>
 			<% end %>
-		</div>
-	</td>
-<% else %>
-	<td class="not-required"></td>
-<% end %>
+</div>
