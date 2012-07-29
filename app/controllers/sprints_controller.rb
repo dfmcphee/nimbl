@@ -57,6 +57,7 @@ class SprintsController < ApplicationController
   def edit
     @sprint = Sprint.find(params[:id])
     
+    last_sprint = Sprint.find(:first, :order => "end_time DESC")
     
     @start_datetime = last_sprint.end_time
     @start_date = @start_datetime.strftime("%d-%m-%Y")
