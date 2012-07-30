@@ -1,4 +1,4 @@
-Rails3BootstrapDeviseCancan::Application.routes.draw do
+Nimbl::Application.routes.draw do
   root :to => "home#index"
   
   match '/sprints/:id/add_task' => 'sprints#add_task'

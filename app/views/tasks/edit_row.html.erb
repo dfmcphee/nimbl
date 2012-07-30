@@ -10,38 +10,41 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+  <div class="row">
+  	<div class="span3">
+	  <div class="field">
+	    <%= f.label :name %>
+	    <%= f.text_field :name %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :hour_estimate %>
+	    <%= f.text_field :hour_estimate %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :story_points %>
+	    <%= f.text_field :sp %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :business_value_points %>
+	    <%= f.text_field :bvp %>
+	  </div>
+  	</div>
+  	<div class="span3">
+  	  <div class="field">
+	    <%= f.label :description %>
+	    <%= f.text_area :description, :cols => "30", :rows => "10" %>
+	  </div>
+  	</div>
+  	<div class="span3">
+  	  <fieldset>
+	  	<legend>Required Stages</legend>
+	  	<% @task_stages.each do |task_stage| %>
+	  		<label>
+	  			<%= task_stage.stage.name %>
+	  			<%= check_box_tag 'stages[]', task_stage.stage.id, task_stage.required %>
+	  		</label>
+	  	<% end %>
+	  </fieldset>
+  	</div>
   </div>
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description, :cols => "30", :rows => "10" %>
-  </div>
-  <div class="field">
-    <%= f.label :hour_estimate %>
-    <%= f.text_field :hour_estimate %>
-  </div>
-  <div class="field">
-    <%= f.label :story_points %>
-    <%= f.text_field :sp %>
-  </div>
-  <div class="field">
-    <%= f.label :business_value_points %>
-    <%= f.text_field :bvp %>
-  </div>
-  
-  <fieldset>
-  	<legend>Required Stages</legend>
-  	<% @task_stages.each do |task_stage| %>
-  		<label>
-  			<%= task_stage.stage.name %>
-  			<%= check_box_tag 'stages[]', task_stage.stage.id, task_stage.required %>
-  		</label>
-  	<% end %>
-  </fieldset>
-
-  <a href="#" class="btn btn-danger pull-right cancel-row" data-task-id="<%= @task.id %>">Cancel</a>
-  <a href="#" class="btn btn-primary pull-right save-row" data-task-id="<%= @task.id %>">Save</a>
 <% end %>

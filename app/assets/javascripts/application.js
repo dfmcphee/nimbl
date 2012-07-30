@@ -35,6 +35,7 @@ $(document).ready(function() {
 		
 		$.get(url, function(data) {
 			$('#edit-task-modal .task-form').html(data);
+			$('#edit-task-modal .modal-footer .btn-primary').attr('data-task-id', task_id);
 			$('#edit-task-modal').modal('show');
 		});
 		
@@ -60,6 +61,7 @@ $(document).ready(function() {
 			$.get(url, function(data) {
 				$(row).replaceWith(data);
 				$('#edit-task-modal').modal('hide');
+				$('.dropdown-toggle').dropdown()
 			});
 			
 			burndown_data = data.burndown_data;

@@ -4,7 +4,7 @@ class Increment < ActiveRecord::Base
   belongs_to :sprint
   
   def self.add_sprint_increment
-  	logger.info 'Increment hit.'
+  	today = Time.now
   	sprints = Sprint.find(:all, :conditions => ['start_time < ? AND end_time > ?', today, today])
   	sprints.each do |sprint|
 	  	increment = Increment.new

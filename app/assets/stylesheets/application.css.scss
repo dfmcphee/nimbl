@@ -18,6 +18,8 @@
 }
 
 .btn-small {
+	position:relative;
+	top:-3.5px;
 	float:right;
 	vertical-align:middle;
 	color:#c50000;
@@ -83,7 +85,7 @@ table {
 }
 
 .stages-toolbar {
-	width: 120px;
+	width: 105px;
 	margin-bottom:10px;
 }
 
@@ -116,6 +118,15 @@ td.row-actions-cell {
 
 .row-actions {
 	width:10px;
+}
+
+#edit-task-modal {
+	width: 900px;
+	margin-left: -450px;
+}
+
+p.assigned-name {
+	margin-top:8px;
 }
 
 /*

@@ -28,6 +28,8 @@ class SprintsController < ApplicationController
     
     @number_of_days = ((@sprint.end_time - @sprint.start_time) / 1.day).to_i
     
+    @users = User.find(:all, :conditions => ["id != ?", current_user.id])
+    
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @sprint }
@@ -59,10 +61,10 @@ class SprintsController < ApplicationController
     
     last_sprint = Sprint.find(:first, :order => "end_time DESC")
     
-    @start_datetime = @sprint.end_time
+    @start_datetime = @sprint.start_time
     @start_date = @start_datetime.strftime("%d-%m-%Y")
     
-    @end_datetime = (@sprint.end_time + 7.days)
+    @end_datetime = @sprint.end_time
     @end_date = @end_datetime.strftime("%d-%m-%Y")
   end
 
@@ -171,15 +173,25 @@ class SprintsController < ApplicationController
   	@sprint = Sprint.find(params[:id])
   	
   	if !params[:task_stage_id].nil?
-  		@assignment = Assignment.where(:user_id => current_user.id, :task_stage_id => params[:task_stage_id])
+  		@user = User.find(params[:user_id])
   		
-  		@task_stage = TaskStage.find(params[:task_stage_id])
-  		
-  		if !@task_stage.nil? && @assignment.empty?
-  			@assignment = Assignment.new
-			@assignment.task_stage = @task_stage
-			@assignment.user = current_user
-	  		@assignment.save
+  		if !@user.nil?
+	  		@assignment = Assignment.where(:user_id => @user.id, :task_stage_id => params[:task_stage_id])
+	  		
+	  		@task_stage = TaskStage.find(params[:task_stage_id])
+	  		
+	  		if !@task_stage.nil? && @assignment.empty?
+	  			@assignment = Assignment.new
+				@assignment.task_stage = @task_stage
+				@assignment.user = @user
+				
+				if @task_stage.status == 'open'
+					@task_stage.status = 'started'
+					@task_stage.save
+				end
+				
+		  		@assignment.save
+		  	end
 	  	end
 	 end
 	 

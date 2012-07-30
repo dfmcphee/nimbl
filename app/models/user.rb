@@ -10,4 +10,5 @@ class User < ActiveRecord::Base
   attr_accessible :name, :username, :email, :password, :password_confirmation, :remember_me
   
   has_many :assignments
+  has_many :notifications
 end

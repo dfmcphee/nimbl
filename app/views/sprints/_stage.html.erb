@@ -19,21 +19,40 @@
 		</div>
 		<% already_assigned = false %>
 		<div class="assigned-to">
+			<div class="btn-group">
+			  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+			    Assign
+			    <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu">
+				  <!-- dropdown menu links -->
+				  <% if !already_assigned %>
+					<li>
+						<%= link_to "Assign to Myself", :controller => "sprints", :action => "assign_stage", :id => @sprint.id, :task_stage_id => stage.id, :user_id => current_user.id %>
+					</li>
+					<li class="divider"></li>
+				  <% end %>
+				  <%  User.find(:all, :conditions => ["id != ?", current_user.id]).each do |user|%>
+					<li>
+						<%= link_to user.name, :controller => "sprints", :action => "assign_stage", :id => @sprint.id, :task_stage_id => stage.id, :user_id => user.id %>
+					</li>
+				  <% end %>
+			  </ul>
+			</div>
+
 			<% stage.assignments.each do |assignment| %>
 				<% if assignment.user.id == current_user.id %>
 					<% already_assigned = true %>
+				<% else %>
+					<% already_assigned = false %>
 				<% end %>
-				<p>
-					<%= assignment.user.username %>
+				<p class="assigned-name"><%= assignment.user.username %>
 					<% if already_assigned %>
 						<%= link_to({:controller => "sprints", :action => "remove_assignment", :id => @sprint.id, :task_stage_id => stage.id}, {:class => 'btn-small'}) do %>
 							<i class="icon-remove-circle"></i>
 						<% end %>
 					<% end %>
 				</p>
-			<% end %>
-			<% if !already_assigned %>
-				<%= link_to "Assign to Myself", :controller => "sprints", :action => "assign_stage", :id => @sprint.id, :task_stage_id => stage.id %>
 			<% end %>
 		</div>
 	</td>

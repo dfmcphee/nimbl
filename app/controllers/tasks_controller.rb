@@ -39,6 +39,7 @@ class TasksController < ApplicationController
     	task_stage.stage = stage
     	task_stage.task = @task
     	task_stage.status = 'open'
+    	task_stage.required = true
     	
     	@task_stages.push(task_stage)
     end
@@ -106,6 +107,8 @@ class TasksController < ApplicationController
   # PUT /tasks/1.json
   def update
     @task = Task.find(params[:id])
+    
+    @users = User.find(:all, :conditions => ["id != ?", current_user.id])
     
     if !params[:stages].nil?
 	    required_stages = params[:stages].collect {|id| id.to_i}

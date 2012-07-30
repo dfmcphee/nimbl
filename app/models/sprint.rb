@@ -19,7 +19,7 @@ class Sprint < ActiveRecord::Base
 				stages_complete = stages_complete + 1
 			end
 		end
-		if stages_complete === stages_required
+		if stages_complete === stages_required && !task.sp.nil?
 			sp_complete = sp_complete + task.sp
 		end
 	end
@@ -36,7 +36,7 @@ class Sprint < ActiveRecord::Base
     
     i = 1
     self.increments.each do |increment|
-    	burndown_data.push([i, increment.completed])
+    	burndown_data.push([i, target_sp - increment.completed])
     	i+=1
     end
     

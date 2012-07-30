@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 				stages_complete = stages_complete + 1
 			end
 		end
-		if stages_complete === stages_required
+		if stages_complete === stages_required && !task.sp.nil?
 			sp_complete = sp_complete + task.sp
 		end
 	end
