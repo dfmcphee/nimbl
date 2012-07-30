@@ -17,15 +17,13 @@
   margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
 }
 
-.btn-small {
-	position:relative;
-	top:-3.5px;
+.btn-unassign {
 	float:right;
 	vertical-align:middle;
 	color:#c50000;
 }
 
-.btn-small:hover {
+.btn-unassign:hover {
 	text-decoration: none;
 	color:#9e0000;
 }

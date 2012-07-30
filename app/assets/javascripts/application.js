@@ -25,6 +25,55 @@ $(document).ready(function() {
         "sPaginationType": "scrolling"
     } );
     
+    // Setup event for adding a task row
+    $('.btn-add-task').live('click', function() {
+	    row = $(this).closest('tr');
+	    
+	    var url = '/tasks/new_row';
+		
+		$.get(url, function(data) {
+			$('#edit-task-modal .task-form').html(data);
+			$('#edit-task-modal .modal-footer .btn-primary').removeClass('save-row');
+			$('#edit-task-modal .modal-footer .btn-primary').addClass('add-row');
+			$('#edit-task-modal').modal('show');
+		});
+    });
+    
+    // Setup event for saving a new task row
+    $('.add-row').live('click', function(event) {
+	    
+	    var form = $('#edit-task-modal .task-form form');
+	    
+	    var form_data = $(form).serialize();
+	    
+	    $.ajax({
+	      type: 'POST',
+		  url: $(form).attr('action'),
+		  data: form_data,
+		  dataType: "JSON",
+		  success: function(data) {
+			var url = '/tasks/' + data.id + '/task_row';
+		
+			$.get(url, function(data) {
+				$(row).replaceWith(data);
+				$('#edit-task-modal').modal('hide');
+				$('.dropdown-toggle').dropdown()
+			});
+			
+			burndown_data = data.burndown_data;
+			target_storypoints = data.stats.target_sp;
+			
+			plot_burndown_data();
+			
+			$('#target-sp').html(data.stats.target_sp);
+			
+			$('#sp-complete').html(data.stats.sp_completed);
+		  	  
+		  	$('#percentage').html(data.stats.percentage + '% left');
+		  }
+		});
+    });
+    
     // Setup event for editing a task row
     $('.edit-row-button').live('click', function() {
 	    row = $(this).closest('tr');
@@ -35,6 +84,7 @@ $(document).ready(function() {
 		
 		$.get(url, function(data) {
 			$('#edit-task-modal .task-form').html(data);
+			$('#edit-task-modal .modal-footer .btn-primary').addClass('save-row');
 			$('#edit-task-modal .modal-footer .btn-primary').attr('data-task-id', task_id);
 			$('#edit-task-modal').modal('show');
 		});

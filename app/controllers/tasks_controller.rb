@@ -51,6 +51,28 @@ class TasksController < ApplicationController
       format.json { render json: @task }
     end
   end
+  
+  def new_row
+  	@task = Task.new
+    
+    @task_stages = Array.new
+    
+    stages = Stage.find(:all)
+    
+    stages.each do |stage|
+    	task_stage = TaskStage.new
+    	task_stage.stage = stage
+    	task_stage.task = @task
+    	task_stage.status = 'open'
+    	task_stage.required = true
+    	
+    	@task_stages.push(task_stage)
+    end
+    
+    @sprints = Sprint.find(:all)
+    
+    render :layout => false
+  end
 
   # GET /tasks/1/edit
   def edit
@@ -71,6 +93,9 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(params[:task])
+    
+    today = Date.today
+  	@task.sprint = Sprint.find(:first, :conditions => ['start_time < ? AND end_time > ?', today, today])
     
     required_stages = params[:stages].collect {|id| id.to_i}
     stages = Stage.find(:all)

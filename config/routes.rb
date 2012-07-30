@@ -11,6 +11,8 @@ Nimbl::Application.routes.draw do
   
   match '/sprints/change_status' => 'sprints#change_status'
   
+  match '/tasks/new_row' => 'tasks#new_row'
+  
   match '/tasks/:id/edit_row' => 'tasks#edit_row'
   
   match '/tasks/:id/task_row' => 'tasks#task_row'

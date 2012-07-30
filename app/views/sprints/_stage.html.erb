@@ -47,10 +47,8 @@
 					<% already_assigned = false %>
 				<% end %>
 				<p class="assigned-name"><%= assignment.user.username %>
-					<% if already_assigned %>
-						<%= link_to({:controller => "sprints", :action => "remove_assignment", :id => @sprint.id, :task_stage_id => stage.id}, {:class => 'btn-small'}) do %>
-							<i class="icon-remove-circle"></i>
-						<% end %>
+					<%= link_to({:controller => "sprints", :action => "remove_assignment", :id => @sprint.id, :task_stage_id => stage.id}, {:class => 'btn-unassign'}) do %>
+						<i class="icon-remove-circle"></i>
 					<% end %>
 				</p>
 			<% end %>
