@@ -55,21 +55,23 @@ $(document).ready(function() {
 			var url = '/tasks/' + data.id + '/task_row';
 		
 			$.get(url, function(data) {
-				$(row).replaceWith(data);
+				$('.dataTable tbody').append(data);
 				$('#edit-task-modal').modal('hide');
-				$('.dropdown-toggle').dropdown()
+				$('.dropdown-toggle').dropdown();
 			});
 			
-			burndown_data = data.burndown_data;
-			target_storypoints = data.stats.target_sp;
-			
-			plot_burndown_data();
-			
-			$('#target-sp').html(data.stats.target_sp);
-			
-			$('#sp-complete').html(data.stats.sp_completed);
-		  	  
-		  	$('#percentage').html(data.stats.percentage + '% left');
+			if (data.burndown_data) {
+				burndown_data = data.burndown_data;
+				target_storypoints = data.stats.target_sp;
+				
+				plot_burndown_data();
+				
+				$('#target-sp').html(data.stats.target_sp);
+				
+				$('#sp-complete').html(data.stats.sp_completed);
+			  	  
+			  	$('#percentage').html(data.stats.percentage + '% left');
+		  	}
 		  }
 		});
     });
