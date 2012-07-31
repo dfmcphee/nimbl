@@ -17,6 +17,8 @@ Nimbl::Application.routes.draw do
   
   match '/tasks/:id/task_row' => 'tasks#task_row'
   
+  match '/tasks/:id/update_hours' => 'tasks#update_hours'
+  
   resources :sprints
   
 

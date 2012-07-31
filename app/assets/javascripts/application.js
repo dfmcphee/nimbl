@@ -134,6 +134,27 @@ $(document).ready(function() {
     $('.cancel-row').live('click', function(event) {	    
 	    $('#edit-task-modal').modal('hide');
     });
+    
+    // Setup event for updating hours complete
+    $('.task-hours-complete').live('change', function(event) {	    
+		var task_id = $(this).closest('tr').attr('data-task-id');
+		var url = '/tasks/' + task_id + '/update_hours.json';
+		var hours = $(this).val();
+		
+		$.ajax({
+	      type: 'POST',
+		  url: url,
+		  data: {
+		  	hours_complete: hours
+		  },
+		  dataType: "JSON",
+		  success: function(data) {
+		  	if (hours != data.hours_complete) {
+			  	alert("Something went wrong and your hours could not be saved. Please try again.");
+		  	}
+		  }
+		});
+    });
 });
 
 function plot_burndown_data() {

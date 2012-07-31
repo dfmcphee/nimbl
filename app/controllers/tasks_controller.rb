@@ -174,6 +174,17 @@ class TasksController < ApplicationController
       end
     end
   end
+  
+  def update_hours
+  	@task = Task.find(params[:id])
+  	if !params[:hours_complete].nil?
+  		@task.hours_complete = params[:hours_complete]
+  		@task.save
+  	end
+  	respond_to do |format|
+  		format.json { render json: @task }
+  	end
+  end
 
   # DELETE /tasks/1
   # DELETE /tasks/1.json

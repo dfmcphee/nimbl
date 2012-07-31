@@ -1,4 +1,4 @@
-<tr>
+<tr data-task-id="<%= task.id %>">
 	<td>
 		<span class="task-description"><%= task.description %></span>
 	</td>
@@ -14,6 +14,10 @@
 				<%= "%.2f" % (task.bvp / task.sp) %>
 			<% end %>
 		</span>
+	</td>
+	<td><%= task.hour_estimate %></td>
+	<td>
+		<input type="text" class="task-hours-complete" value="<%= task.hours_complete %>" />
 	</td>
 	<% if !task.task_stages.empty? %>
 		<% task.task_stages.each do |stage| %>
