@@ -79,7 +79,7 @@ Nimbl::Application.configure do
     password: ENV["GMAIL_PASSWORD"]
   }
 
-
+  config.gem 'whenever', :lib => false
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
