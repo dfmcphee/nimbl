@@ -4,7 +4,19 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all(:conditions => ['sprint_id IS NULL'])
+    @tasks = Task.all(:conditions => ['sprint_id IS NULL AND backlogged = ?', false])
+    @sprints = Sprint.find(:all)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @tasks }
+    end
+  end
+  
+  # GET /backlog
+  # GET /backlog.json
+  def backlog
+    @tasks = Task.all(:conditions => ['sprint_id IS NULL AND backlogged = ?', true])
     @sprints = Sprint.find(:all)
 
     respond_to do |format|
@@ -119,7 +131,7 @@ class TasksController < ApplicationController
     
     respond_to do |format|
       if @task.save
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
+        format.html { redirect_to :action => "index", notice: 'Task was successfully created.' }
         format.json { render json: @task, status: :created, location: @task }
       else
         format.html { render action: "new" }
@@ -166,7 +178,7 @@ class TasksController < ApplicationController
 		percentage = "%.0f" % (100 - ((sp_completed / target_sp) * 100))
 		
 		@stats = {:target_sp => target_sp, :sp_completed => sp_completed, :percentage => percentage}
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        format.html { redirect_to :action => "index", notice: 'Task was successfully updated.' }
         format.json { render json: {:task => @task, :task_stages => @task_stages, :burndown_data => @burndown_data, :stats => @stats } }
       else
         format.html { render action: "edit" }
@@ -179,6 +191,17 @@ class TasksController < ApplicationController
   	@task = Task.find(params[:id])
   	if !params[:hours_complete].nil?
   		@task.hours_complete = params[:hours_complete]
+  		@task.save
+  	end
+  	respond_to do |format|
+  		format.json { render json: @task }
+  	end
+  end
+  
+  def add_to_backlog
+  	@task = Task.find(params[:id])
+  	if !@task.nil?
+  		@task.backlogged = true
   		@task.save
   	end
   	respond_to do |format|

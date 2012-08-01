@@ -17,4 +17,15 @@ class User < ActiveRecord::Base
   
   validates_presence_of :username
   validates_uniqueness_of :username
+  
+  validates_presence_of :email
+  validates_uniqueness_of :email
+  
+  def is_manager?
+  	if (self.has_role? :admin) || (self.has_role? :product_owner) || (self.has_role? :scrum_master)
+      return true
+    else
+      return false
+    end
+  end
 end

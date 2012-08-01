@@ -1,4 +1,4 @@
-<h1>Backlog</h1>
+<h1>Task Inbox</h1>
 <hr/>
 <table class="table">
   <thead>
@@ -6,6 +6,9 @@
 	    <th>Name</th>
 	    <th>Description</th>
 	    <th>Added by</th>
+	    <th>SP</th>
+	    <th>BV</th>
+	    <th>Hour Estimate</th>
 	    <th></th>
   	</tr>
   </thead>
@@ -16,11 +19,19 @@
 	    <td><%= task.name %></td>
 	    <td><%= task.description %></td>
 	    <td><%= task.user.name %></td>
+	    <td><%= task.sp %></td>
+	    <td><%= task.bvp %></td>
+	    <td><%= task.hour_estimate %></td>
 	    <td>
-	    	<%= link_to 'Show', task, :class => 'btn btn-info' %>
-	    	<a href="#" class="btn btn-primary add-to-sprint" data-task-id="<%= task.id %>">Add to Sprint</a>
-	    	<%= link_to 'Edit', edit_task_path(task), :class => 'btn btn-warning' %>
-	    	<%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %>
+	    	<% if current_user.is_manager? %>
+	    		<a href="#" class="btn btn-primary add-to-backlog" data-task-id="<%= task.id %>">Add to Backlog</a>
+	    	<% end %>
+	    	<%= link_to(edit_task_path(task), :class => 'btn btn-warning') do %>
+	    		<i class="icon-edit"></i>
+	    	<% end %>
+	    	<%= link_to(task, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger') do %>
+	    		<i class="icon-remove"></i>
+	    	<% end %>
 	    </td>
   	</tr>
   </tbody>
@@ -28,10 +39,5 @@
 </table>
 
 <br />
-
-<div class="field">
-	<label>Sprint</label>
-	<%= collection_select(:task, :stage_id, @sprints, :id, :name, {:prompt => true}) %>
-</div>
 
 <%= link_to 'New Task', new_task_path, :class => 'btn btn-primary' %>

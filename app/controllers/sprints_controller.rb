@@ -204,8 +204,8 @@ class SprintsController < ApplicationController
   def remove_assignment
   	@sprint = Sprint.find(params[:id])
   	
-  	if !params[:task_stage_id].nil?
-  		@assignment = Assignment.where(:user_id => current_user.id, :task_stage_id => params[:task_stage_id]).first
+  	if !params[:task_stage_id].nil? && !params[:user_id].nil?
+  		@assignment = Assignment.where(:user_id => params[:user_id], :task_stage_id => params[:task_stage_id]).first
   		
   		if !@assignment.nil?
 	  		@assignment.destroy

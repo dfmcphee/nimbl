@@ -3,7 +3,7 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
-    if user.has_role? :admin
+    if user.has_role? :admin || user.has_role? :scrum_master || user.has_role? :product_owner
       can :manage, :all
     end
     # Define abilities for the passed in user here. For example:

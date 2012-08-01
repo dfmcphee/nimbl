@@ -25,6 +25,7 @@
 		<% end %>
 	<% end %>
 	<td class="row-actions-cell">
+		<% if current_user.is_manager? %>
 		<div class="row-actions btn-group-vertical" data-toggle="buttons-radio">
 			<a href="#" class="btn btn-warning edit-row-button" data-task-id="<%= task.id %>">
 				<i class="icon-white icon-edit"></i>
@@ -34,6 +35,7 @@
 				<i class="icon-white icon-remove"></i>
 			</a>
 		</div>
+		<% end %>
 	</td>
 </tr>
 

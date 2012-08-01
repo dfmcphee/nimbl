@@ -19,6 +19,10 @@ Nimbl::Application.routes.draw do
   
   match '/tasks/:id/update_hours' => 'tasks#update_hours'
   
+  match '/tasks/:id/add_to_backlog' => 'tasks#add_to_backlog'
+  
+  match '/backlog' => 'tasks#backlog'
+  
   resources :sprints
   
 

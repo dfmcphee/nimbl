@@ -10,43 +10,48 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description, :cols => "30", :rows => "10" %>
-  </div>
-  <div class="field">
-    <%= f.label :hour_estimate %>
-    <%= f.text_field :hour_estimate %>
-  </div>
-  <div class="field">
-    <%= f.label :story_points %>
-    <%= f.text_field :sp %>
-  </div>
-  <div class="field">
-    <%= f.label :business_value_points %>
-    <%= f.text_field :bvp %>
-  </div>
-  
-  <div class="field">
-    <%= collection_select(:task, :sprint_id, @sprints, :id, :name, {:prompt => true}) %>
-  </div>
-  
-  <fieldset>
-  	<legend>Required Stages</legend>
-  	<% @task_stages.each do |task_stage| %>
-  		<label>
-  			<%= task_stage.stage.name %>
-  			<%= check_box_tag 'stages[]', task_stage.stage.id, task_stage.required %>
-  		</label>
-  	<% end %>
-  </fieldset>
-
-  <div class="actions">
-    <%= f.submit "Save", :class => 'btn btn-primary pull-right' %>
+  <div class="row">
+  	<div class="span3">
+	  <div class="field">
+	    <%= f.label :name %>
+	    <%= f.text_field :name %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :hour_estimate %>
+	    <%= f.text_field :hour_estimate %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :story_points %>
+	    <%= f.text_field :sp %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :business_value_points %>
+	    <%= f.text_field :bvp %>
+	  </div>
+	  
+	  <div class="field">
+	    <label>Add to sprint: </label>
+	    <%= collection_select(:task, :sprint_id, @sprints, :id, :name, {:prompt => true}) %>
+	  </div>
+  	</div>
+  	<div class="span3">
+  	  <div class="field">
+	    <%= f.label :description %>
+	    <%= f.text_area :description, :cols => "30", :rows => "10" %>
+	  </div>
+	  <fieldset>
+	  	<legend>Required Stages</legend>
+	  	<% @task_stages.each do |task_stage| %>
+	  		<label>
+	  			<%= task_stage.stage.name %>
+	  			<%= check_box_tag 'stages[]', task_stage.stage.id, task_stage.required %>
+	  		</label>
+	  	<% end %>
+	  </fieldset>
+	</div>
+	
+    <div class="actions">
+    	<%= f.submit "Save", :class => 'btn btn-primary pull-right' %>
+    </div>
   </div>
 <% end %>
